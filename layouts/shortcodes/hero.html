@@ -1,0 +1,25 @@
+{{/*
+Shortcode: hero
+
+Usage in Markdown:
+
+  {{< hero title="Welcome" gradient="true" >}}
+  Your **Markdown** body goes here.
+  {{< /hero >}}
+
+Parameters:
+  - title     (string) Heading text (optional).
+  - gradient  (bool)   "true" to apply gradient background (optional).
+*/}}
+
+{{ $classes := slice "hero" }}
+{{ if eq (.Get "gradient") "true" }}
+  {{ $classes = $classes | append "hero--home" }}
+{{ end }}
+
+<div class="{{ delimit $classes " " }}">
+  {{ with .Get "title" }}<h1>{{ . }}</h1>{{ end }}
+  <div class="content">
+    {{ .Inner | markdownify }}
+  </div>
+</div>

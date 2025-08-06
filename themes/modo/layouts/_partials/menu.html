@@ -1,0 +1,21 @@
+{{- $page := .page }}
+{{- $menuID := .menuID }}
+
+{{- with index site.Menus $menuID }}
+  <nav class="main-menu">
+    <ul>
+      {{- range . }}
+        <li{{ if .Children }} class="has-children"{{ end }}>
+          <a href="{{ .URL }}">{{ .Name }}</a>
+          {{- with .Children }}
+            <ul>
+              {{- range . }}
+                <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+              {{- end }}
+            </ul>
+          {{- end }}
+        </li>
+      {{- end }}
+    </ul>
+  </nav>
+{{- end }}

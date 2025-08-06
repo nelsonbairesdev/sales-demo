@@ -1,0 +1,96 @@
+baseURL = 'https://modopayments.github.io/sales-demo/'
+languageCode = 'en-us'
+title = 'Modo'
+theme = "modo"
+
+[menu]
+  [[menu.main]]
+    name = "Platform"
+    url = "/platform/"
+    weight = 1
+
+  [[menu.main]]
+    name = "Customers"
+    url = "/customers/"
+    weight = 2
+
+  [[menu.main]]
+    name = "Company"
+    url = "/company/"
+    weight = 3
+
+  # Platform children
+  [[menu.main]]
+    name = "Payment Routing"
+    url = "/platform/routing/"
+    parent = "Platform"
+    weight = 1
+
+  [[menu.main]]
+    name = "ML-Based Optimization"
+    url = "/platform/ml-optimization/"
+    parent = "Platform"
+    weight = 2
+
+  [[menu.main]]
+    name = "Consumer Experiences"
+    url = "/platform/consumer-experiences/"
+    parent = "Platform"
+    weight = 5
+
+  [[menu.main]]
+    name = "Recurring Payments"
+    url = "/platform/recurring-payments/"
+    parent = "Platform"
+    weight = 4
+
+  [[menu.main]]
+    name = "Financial Reconciliation"
+    url = "/platform/financial-reconciliation/"
+    parent = "Platform"
+    weight = 3
+
+  # Customers children
+  [[menu.main]]
+    name = "Fortune 500"
+    url = "/customers/fortune-500/"
+    parent = "Customers"
+    weight = 1
+
+  [[menu.main]]
+    name = "Mergers & Acquisitions"
+    url = "/customers/mergers-acquisitions/"
+    parent = "Customers"
+    weight = 2
+
+  [[menu.main]]
+    name = "Banks"
+    url = "/customers/banks/"
+    parent = "Customers"
+    weight = 3
+
+  # Company children
+  [[menu.main]]
+    name = "About Us"
+    url = "/company/about/"
+    parent = "Company"
+
+  [[menu.main]]
+    name = "Careers"
+    url = "/company/careers/"
+    parent = "Company"
+
+  [[menu.main]]
+    name = "Trust & Security"
+    url = "/company/trust-security/"
+    parent = "Company"
+
+  [[menu.main]]
+    name = "Terms & Policies"
+    url = "/company/terms-policies/"
+    parent = "Company"
+
+  [[menu.main]]
+    name = "Developer Center"
+    url = "/company/developer-center/"
+    parent = "Company"

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Mock</title>
+  <link rel="stylesheet" href="/sales-demo/css/main.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@main/css/iconoir.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+  <style>
+    /* Terminal row color‑coding */
+    .terminal-row{
+      padding:4px;
+      white-space:pre-wrap;
+      font-family:'Roboto Mono',monospace;
+    }
+    .terminal-row-frontend{background:#e6ffe6;color:#000;}
+    .terminal-row-server{background:#fff8e6;color:#000;}
+    .terminal-row-modopop{background:#1e1e1e;color:#d4d4d4;}
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      height: 100vh;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto;
+        height: auto;
+        min-height: 100vh;
+      }
+      
+      .front-end {
+        grid-column: 1;
+        grid-row: 1;
+        height: 50vh;
+        min-height: 300px;
+      }
+      
+      .left-bottom {
+        grid-column: 1;
+        grid-row: 2;
+        flex-direction: column;
+        height: 50vh;
+        min-height: 300px;
+      }
+      
+      .top-right {
+        grid-column: 1;
+        grid-row: 3;
+        height: 50vh;
+        min-height: 300px;
+      }
+      
+      .bottom-right {
+        grid-column: 1;
+        grid-row: 4;
+        height: 50vh;
+        min-height: 300px;
+      }
+      
+      .frontend-editor,
+      .server-editor {
+        height: 50%;
+        min-height: 150px;
+      }
+    }
+
+    .front-end {
+      grid-column: 1;
+      grid-row: 1;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 8px;
+      /* Remove background, padding, border-radius, and box-shadow so only header and content are visually distinct */
+      border: 1px solid #ccc;
+    }
+
+    .front-end .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .left-bottom {
+      grid-column: 1;
+      grid-row: 2;
+      display: flex;
+      flex-direction: row;
+    }
+
+    .frontend-editor,
+    .server-editor {
+      flex: 1;
+      height: 100%;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+      margin-bottom: 0;
+    }
+
+    .frontend-editor .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .frontend-editor .header label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .frontend-editor .content,
+    .server-editor .content {
+      flex: 1;
+      padding: 10px;
+    }
+
+    .code-editor {
+      width: 100%;
+      height: 100%;
+      flex: 1;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 14px;
+      border: none;
+      outline: none;
+      resize: none;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .highlight-url {
+      font-weight: bold;
+      color: green;
+    }
+
+    .modo-podium {
+      background: #e9ecef;
+    }
+
+    .box .header,
+    .front-end .header,
+    .top-right .header,
+    .bottom-right .header {
+      background: #0078d7;
+      color: white;
+      padding: 10px;
+      font-weight: bold;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+
+    .top-right {
+      grid-column: 2;
+      grid-row: 1;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+    }
+
+    .top-right .content {
+      flex: 1;
+      background: #1e1e1e;
+      color: #d4d4d4;
+      font-family: 'Roboto Mono', monospace;
+      padding: 10px;
+      overflow-y: auto;
+    }
+
+    .bottom-right {
+      grid-column: 2;
+      grid-row: 2;
+      background: #e9ecef;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    .front-end .content {
+      background: #fff;
+      padding: 2rem 2.5rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.06);
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+    }
+    .bottom-right .content {
+      padding: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background: #f2f2f2;
+    }
+
+    #settings-modal {
+      max-width: 400px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="front-end">
+      <div class="header">
+        <span>Front End</span>
+      </div>
+      <div class="content">
+        <h2 style="text-align: center; font-family: Arial, sans-serif;">Example Co</h2>
+        <p style="text-align: center; font-family: Arial, sans-serif;">Purchase for Widget</p>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ccc;">Item</td>
+            <td style="padding: 10px; border: 1px solid #ccc; text-align: right;">$15.99</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ccc;">Shipping</td>
+            <td style="padding: 10px; border: 1px solid #ccc; text-align: right;">$5.00</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ccc;">Sales Tax</td>
+            <td style="padding: 10px; border: 1px solid #ccc; text-align: right;">$1.75</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ccc; font-weight: bold;">Total</td>
+            <td style="padding: 10px; border: 1px solid #ccc; text-align: right; font-weight: bold;">$22.74</td>
+          </tr>
+        </table>
+        <div id="card-element" style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: #fff;"></div>
+        <div id="card-errors" style="color: #fa755a; font-size: 14px; margin-top: 10px;"></div>
+        <button id="submit-button" style="margin-top: 10px; padding: 10px 20px; background: #0078d7; color: white; border: none; border-radius: 4px; cursor: pointer;">Checkout</button>
+      </div>
+    </div>
+    <div class="left-bottom">
+      <div class="box frontend-editor">
+        <div class="header">
+          <span>Frontend Code Editor</span>
+          <label style="display: flex; align-items: center; gap: 5px;">
+            <input id="toggleModo" type="checkbox">
+            Enable Modo.js
+          </label>
+        </div>
+        <div class="content">
+          <textarea class="code-editor" placeholder="Write your code here..."><script src="https://js.stripe.com/v3/"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Stripe
+    const stripe = Stripe('your-publishable-key-here');
+    const elements = stripe.elements();
+
+    // Create and mount the card element
+    const card = elements.create('card', {
+      style: {
+        base: {
+          color: '#32325d',
+          fontFamily: 'Arial, sans-serif',
+          fontSmoothing: 'antialiased',
+          fontSize: '16px',
+          '::placeholder': {
+            color: '#aab7c4'
+          }
+        },
+        invalid: {
+          color: '#fa755a',
+          iconColor: '#fa755a'
+        }
+      }
+    });
+
+    card.mount('#card-element');
+</script></textarea>
+        </div>
+      </div>
+      <div class="box server-editor">
+        <div class="header">Server Code Editor</div>
+        <div class="content">
+          <textarea class="code-editor" placeholder="Write your code here..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="top-right">
+      <div class="header">Terminal</div>
+      <div class="content">Waiting for a request...</div>
+    </div>
+    <div class="bottom-right">
+      <div class="header">Modo Podium</div>
+      <div class="content">This is the Modo Podium visualization.</div>
+    </div>
+  </div>
+  <script src="https://js.stripe.com/v3/"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize Stripe
+      const stripe = Stripe('your-publishable-key-here');
+      const elements = stripe.elements();
+
+      // Create and mount the card element
+      const card = elements.create('card', {
+        style: {
+          base: {
+            color: '#32325d',
+            fontFamily: 'Arial, sans-serif',
+            fontSmoothing: 'antialiased',
+            fontSize: '16px',
+            '::placeholder': {
+              color: '#aab7c4'
+            }
+          },
+          invalid: {
+            color: '#fa755a',
+            iconColor: '#fa755a'
+          }
+        }
+      });
+
+      card.mount('#card-element');
+
+      // Handle real-time validation errors from the card element
+      card.addEventListener('change', (event) => {
+        const displayError = document.getElementById('card-errors');
+        if (event.error) {
+          displayError.textContent = event.error.message;
+        } else {
+          displayError.textContent = '';
+        }
+      });
+
+      const urlBox = document.getElementById('urlBox');
+      const toggleModo = document.getElementById('toggleModo');
+      const modoPopContent = document.querySelector('.top-right .content');
+      const modoPodiumContent = document.querySelector('.bottom-right .content');
+
+      // Initialize Modo Podium dashboard
+      modoPodiumContent.innerHTML = `
+        <table style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr>
+              <th style="border: 1px solid #ccc; padding: 8px;">Timestamp</th>
+              <th style="border: 1px solid #ccc; padding: 8px;">Amount</th>
+              <th style="border: 1px solid #ccc; padding: 8px;">Currency</th>
+              <th style="border: 1px solid #ccc; padding: 8px;">Input API Format</th>
+              <th style="border: 1px solid #ccc; padding: 8px;">Output API Format</th>
+              <th style="border: 1px solid #ccc; padding: 8px;">Status</th>
+            </tr>
+          </thead>
+          <tbody id="transaction-records">
+          </tbody>
+        </table>
+      `;
+
+      toggleModo.addEventListener('change', () => {
+        if (toggleModo.checked) {
+          if (urlBox) {
+            urlBox.value = 'https://stripe.modo.js/basil/stripe.js';
+          }
+        } else {
+          if (urlBox) {
+            urlBox.value = 'https://js.stripe.com/basil/stripe.js';
+          }
+        }
+      });
+
+      const submitButton = document.getElementById('submit-button');
+      submitButton.addEventListener('click', () => {
+        const timestamp = () => new Date().toISOString().split('T')[1].split('.')[0];
+
+        // Generate GUIDs for user and password
+        const generateGUID = () => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+          const r = (Math.random() * 16) | 0;
+          const v = c === 'x' ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        });
+
+        const userGUID = generateGUID();
+        const passGUID = generateGUID();
+
+        // Simulate ModoPOP terminal processing
+        const mockToken = 'tok_mock12345';
+        modoPopContent.innerHTML = `
+          <div class="terminal-row terminal-row-frontend">
+            <i>[${timestamp()}] Frontend Request:</i><br>
+            POST https://js.stripe.com/basil/stripe.js<br>
+            ${JSON.stringify({ token: mockToken, amount: 2274, currency: 'usd' }, null, 2)}
+          </div>
+          <div class="terminal-row terminal-row-modopop">
+            <b>[${timestamp()}] ModoPOP</b><br>
+            Receiving request in Stripe format<br>
+            ${JSON.stringify({ token: mockToken, amount: 2274, currency: 'usd' }, null, 2)}<br><br>
+            Transposing to Chase Format<br>
+            <span id="loading-dots">.</span>
+          </div>
+        `;
+
+        // Simulate loading dots
+        const loadingDots = document.getElementById('loading-dots');
+        let dots = 1;
+        const interval = setInterval(() => {
+          loadingDots.textContent = '.'.repeat(dots);
+          dots = (dots % 3) + 1;
+        }, 300);
+
+        // Simulate processing delay
+        setTimeout(() => {
+          clearInterval(interval);
+          const chaseXML = `
+            <RegisterTokenRequest>
+              <OrbitalConnectionUsername>${userGUID}</OrbitalConnectionUsername>
+              <OrbitalConnectionPassword>${passGUID}</OrbitalConnectionPassword>
+              <IndustryType>ECOM</IndustryType>
+              <MessageType>R</MessageType>
+              <Bin>4CN</Bin>
+              <MerchantID>1234567890</MerchantID>
+              <CardBrand>VI</CardBrand>
+              <CardNumber>4111111111111111</CardNumber>
+              <ExpiryDate>0825</ExpiryDate>
+              <CvData>123</CvData>
+            </RegisterTokenRequest>
+          `;
+
+          const escapeXML = (str) => str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+          modoPopContent.innerHTML += `
+            <div class="terminal-row terminal-row-modopop">
+              Transpose complete<br>
+              Sending to Chase<br>
+              POST https://orbitalvar1.paymentech.net/authorize<br>
+              <pre>${escapeXML(chaseXML)}</pre><br>
+              <b>[${timestamp()}] Processing complete</b>
+            </div>
+          `;
+
+          // Add transaction record to Modo Podium dashboard
+          const transactionRecords = document.getElementById('transaction-records');
+          const newRow = document.createElement('tr');
+          newRow.innerHTML = `
+            <td style="border: 1px solid #ccc; padding: 8px;">${timestamp()}</td>
+            <td style="border: 1px solid #ccc; padding: 8px;">$22.74</td>
+            <td style="border: 1px solid #ccc; padding: 8px;">USD</td>
+            <td style="border: 1px solid #ccc; padding: 8px;">Stripe</td>
+            <td style="border: 1px solid #ccc; padding: 8px;">Chase</td>
+            <td style="border: 1px solid #ccc; padding: 8px;">Success</td>
+          `;
+          transactionRecords.appendChild(newRow);
+        }, 1000);
+
+
+      });
+
+      const frontEndTitle = document.querySelector('.front-end .header span');
+      const settingsModal = document.getElementById('settings-modal');
+      const closeSettings = document.getElementById('close-settings');
+      const downloadConfig = document.getElementById('download-config');
+      const uploadConfig = document.getElementById('upload-config');
+
+      frontEndTitle.addEventListener('dblclick', () => {
+        settingsModal.style.display = 'block';
+      });
+
+      closeSettings.addEventListener('click', () => {
+        settingsModal.style.display = 'none';
+      });
+
+      downloadConfig.addEventListener('click', () => {
+        const config = {
+          storeLogo: 'https://example.com/logo.png',
+          storeName: 'Example Co',
+          product: {
+            name: 'Widget',
+            price: 15.99,
+            shipping: 5.0,
+            salesTax: 1.75,
+            currency: 'USD'
+          },
+          frontendCode: document.querySelector('.frontend-editor .code-editor').value,
+          serverCode: document.querySelector('.server-editor .code-editor').value,
+          inputAPI: 'Stripe',
+          outputAPI: 'Chase',
+          modoPOP: {
+            steps: ['Receiving request', 'Transposing', 'Sending to Chase']
+          }
+        };
+        const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'sandbox-config.json';
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+
+      uploadConfig.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            try {
+              const config = JSON.parse(e.target.result);
+              // Apply config to UI elements (basic example)
+              document.querySelector('.frontend-editor .code-editor').value = config.frontendCode || '';
+              document.querySelector('.server-editor .code-editor').value = config.serverCode || '';
+              // You can expand this to update store name, logo, etc.
+              alert('Config imported successfully!');
+            } catch {
+              alert('Invalid JSON config file.');
+            }
+          };
+          reader.readAsText(file);
+        }
+      });
+    });
+  </script>
+  <div id="settings-modal" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border: 1px solid #ccc; border-radius: 8px; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); z-index: 999;">
+    <h3>Sandbox Settings</h3>
+    <button id="download-config">Download Config</button>
+    <input type="file" id="upload-config" accept=".json">
+    <button id="close-settings">Close</button>
+  </div>
+</body>
+</html>

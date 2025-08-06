@@ -1,0 +1,61 @@
+<div class="header">
+  <div class="logo">
+    <img src="{{ .Site.BaseURL }}img/logo-white.webp" alt="Modo Payments">
+  </div>
+  
+  <!-- Mobile Menu Toggle -->
+  <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+    ☰
+  </button>
+  
+  <!-- Desktop Navigation -->
+  <nav class="nav">
+    {{ partial "menu.html" (dict "menuID" "main" "page" .) }}
+  </nav>
+</div>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu-header">
+    <div class="logo">
+      <img src="{{ .Site.BaseURL }}img/logo-white.webp" alt="Modo Payments">
+    </div>
+    <button class="mobile-menu-close" onclick="toggleMobileMenu()">×</button>
+  </div>
+  
+  <nav class="mobile-nav">
+    {{- with index site.Menus "main" }}
+      <ul>
+        {{- range . }}
+          <li>
+            <a href="{{ .URL }}">{{ .Name }}</a>
+            {{- with .Children }}
+              <ul>
+                {{- range . }}
+                  <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+                {{- end }}
+              </ul>
+            {{- end }}
+          </li>
+        {{- end }}
+      </ul>
+    {{- end }}
+  </nav>
+</div>
+
+<script>
+function toggleMobileMenu() {
+  const mobileMenu = document.getElementById('mobileMenu');
+  mobileMenu.classList.toggle('active');
+}
+
+// Close mobile menu when clicking on a link
+document.addEventListener('DOMContentLoaded', function() {
+  const mobileMenuLinks = document.querySelectorAll('.mobile-menu a');
+  mobileMenuLinks.forEach(link => {
+    link.addEventListener('click', function() {
+      document.getElementById('mobileMenu').classList.remove('active');
+    });
+  });
+});
+</script>

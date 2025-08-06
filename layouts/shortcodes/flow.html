@@ -1,0 +1,91 @@
+<div class="honeycomb-flow">
+  <!-- Background honeycombs surrounding the icons -->
+  <div class="hex background" style="top: -25px; right: 69px;"></div>
+  <div class="hex background" style="top: -25px; left: 69px;"></div>
+  <div class="hex background" style="bottom: -25px; right: 69px;"></div>
+  <div class="hex background" style="bottom: -25px; left: 69px;"></div>
+
+  <!-- New sides (updated placements) -->
+  <div class="hex background" style="top: -25px; left: 159px;"></div>
+  <div class="hex background" style="bottom: -25px; left: 159px;"></div>
+  <div class="hex background" style="top: 64px; left: 24px;"></div>
+  <div class="hex background" style="top: 64px; right: 24px;"></div>
+
+  <!-- Foreground icon honeycombs -->
+  <div class="hex icon1">
+    <i class="{{ .Get "icon1" }}"></i>
+  </div>
+
+  <div class="arrow {{ .Get "direction" }}"></div>
+
+  <div class="hex icon2">
+    <i class="{{ .Get "icon2" }}"></i>
+  </div>
+</div>
+
+<style>
+.honeycomb-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0; /* Remove gap so hexes touch */
+  position: relative;
+  padding: 4rem; /* Added padding around the entire flow container */
+  flex-wrap: wrap;
+  width: 240px; /* Constrain width for honeycomb alignment */
+  margin: 150px;
+  overflow: visible; /* Ensure shadows are not clipped */
+}
+
+.honeycomb-flow .hex,
+.honeycomb-flow .hex.background {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.honeycomb-flow .hex {
+  width: 100px;
+  height: 115px;
+  background: #e0e7ff;
+  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: -25px; /* negative margin to overlap hexes */
+}
+
+.honeycomb-flow .hex.background {
+  position: absolute;
+  background: #ddd; /* lighter grey */
+  opacity: 0.3;
+  z-index: 0;
+}
+
+.honeycomb-flow .hex i {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.honeycomb-flow .arrow {
+  width: 40px;
+  height: 4px;
+  background: #000;
+  z-index: 1;
+}
+
+.honeycomb-flow .arrow.reverse {
+  transform: rotate(180deg);
+}
+</style>
+<svg width="0" height="0">
+  <defs>
+    <clipPath id="roundedHex">
+      <path d="M50 0
+        C65 0, 93 10, 93 25
+        L93 75
+        C93 90, 65 100, 50 100
+        C35 100, 7 90, 7 75
+        L7 25
+        C7 10, 35 0, 50 0 Z" />
+    </clipPath>
+  </defs>
+</svg>

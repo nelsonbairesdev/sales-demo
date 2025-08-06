@@ -1,0 +1,259 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://modopayments.github.io/sales-demo/api-playground/playground-config.schema.json",
+  "title": "API Playground Configuration Schema",
+  "description": "Schema defining defaults and structure for the demo payment playground.",
+  "type": "object",
+  "properties": {
+    "storeLogo": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://example.com/logo.png",
+      "description": "Public URL of the store logo to display in the demo checkout."
+    },
+    "storeName": {
+      "type": "string",
+      "default": "Example Co",
+      "description": "Human‑readable name of the merchant / store."
+    },
+    "product": {
+      "type": "object",
+      "description": "Details of the single product shown in the demo checkout.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "default": "Widget"
+        },
+        "price": {
+          "type": "number",
+          "minimum": 0,
+          "default": 15.99
+        },
+        "shipping": {
+          "type": "number",
+          "minimum": 0,
+          "default": 5.00
+        },
+        "salesTax": {
+          "type": "number",
+          "minimum": 0,
+          "default": 1.75
+        },
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$",
+          "default": "USD"
+        }
+      },
+      "required": ["name", "price", "currency"]
+    },
+    "frontendCode": {
+      "type": "object",
+      "description": "Client-side code snippets for the demo checkout, with both original and ModoPOP-enabled versions.",
+      "properties": {
+        "original": {
+          "type": "string",
+          "contentMediaType": "text/javascript",
+            "default": "<script src=\"https://js.stripe.com/v3/\"></script>\n<script>\n  document.addEventListener('DOMContentLoaded', () => {\n    // Initialize Stripe\n    const stripe = Stripe('your-publishable-key-here');\n    const elements = stripe.elements();\n\n    // Create and mount the card element\n    const card = elements.create('card', {\n      style: {\n        base: {\n          color: '#32325d',\n          fontFamily: 'Arial, sans-serif',\n          fontSmoothing: 'antialiased',\n          fontSize: '16px',\n          '::placeholder': {\n            color: '#aab7c4'\n          }\n        },\n        invalid: {\n          color: '#fa755a',\n          iconColor: '#fa755a'\n        }\n      }\n    });\n\n    card.mount('#card-element');\n  });\n</script>",
+          "description": "Original service integration code."
+        },
+        "modoEnabled": {
+          "type": "string",
+          "contentMediaType": "text/javascript",
+            "default": "<script src=\"https://stripe.modo.js/v3/\"></script>\n<script>\n  document.addEventListener('DOMContentLoaded', () => {\n    // Initialize Stripe\n    const stripe = Stripe('your-publishable-key-here');\n    const elements = stripe.elements();\n\n    // Create and mount the card element\n    const card = elements.create('card', {\n      style: {\n        base: {\n          color: '#32325d',\n          fontFamily: 'Arial, sans-serif',\n          fontSmoothing: 'antialiased',\n          fontSize: '16px',\n          '::placeholder': {\n            color: '#aab7c4'\n          }\n        },\n        invalid: {\n          color: '#fa755a',\n          iconColor: '#fa755a'\n        }\n      }\n    });\n\n    card.mount('#card-element');\n  });\n</script>",
+          "description": "Service integration code instrumented for ModoPOP.",
+          "examples": [
+            "<!-- Stripe example: swap out script src -->\n<script src=\"https://stripe.modo.js/v3/\"></script>\n<script>\n  const stripe = Stripe('$GUID8');\n  /* rest of initialization unchanged */\n</script>",
+            "<!-- Non-Stripe iframe example -->\n<iframe src=\"https://checkout.modo.js/embedded\" width=\"400\" height=\"600\"></iframe>",
+            "<!-- React component example -->\nimport React from 'react';\nimport { ModoProvider, StripeCheckout } from 'modo-pop-react';\n\nfunction App() {\n  return (\n    <ModoProvider config={{/* ... */}}>\n      <StripeCheckout publishableKey=\"pk_test_...\" />\n    </ModoProvider>\n  );\n}"
+          ]
+        }
+      },
+      "required": ["original", "modoEnabled"]
+    },
+    "serverCode": {
+      "type": "object",
+      "description": "Server-side code samples for both the original service and the ModoPOP-enabled endpoint.",
+      "properties": {
+        "original": {
+          "type": "string",
+          "contentMediaType": "text/javascript",
+          "default": "import stripe\nstripe.api_key = \"$GUID9\"\n\ndef charge_card(token, amount, currency=\"usd\"):\n    \"\"\"\n    Creates a Stripe charge using the provided token.\n    \"\"\"\n    try:\n        charge = stripe.Charge.create(\n            amount=int(amount * 100),  # amount in cents\n            currency=currency,\n            source=token,\n            description=\"Charge for Example Co Widget\"\n        )\n        return charge\n    except stripe.error.StripeError as e:\n        # Error handling\n        return {\"error\": str(e)}\n\n# Example usage:\n# result = charge_card(\"tok_mock12345\", 15.99)\n",
+          "description": "Original service endpoint implementation."
+        },
+        "modoEnabled": {
+          "type": "string",
+          "contentMediaType": "text/javascript",
+          "default": "import modo\nmodo.api_key = \"$GUID9\"\n\ndef charge_card(token, amount, currency=\"usd\"):\n    \"\"\"\n    Creates a modo charge using the provided token.\n    \"\"\"\n    try:\n        charge = modo.Charge.create(\n            amount=int(amount * 100),  # amount in cents\n            currency=currency,\n            source=token,\n            description=\"Charge for Example Co Widget\"\n        )\n        return charge\n    except modo.error.ModoError as e:\n        # Error handling\n        return {\"error\": str(e)}\n\n# Example usage:\n# result = charge_card(\"tok_mock12345\", 15.99)\n",
+          "description": "Server code adjusted for ModoPOP routing."
+        }s
+      },
+      "required": ["original", "modoEnabled"]
+    },
+    "inputAPI": {
+      "type": "string",
+      "enum": ["Stripe"],
+      "default": "Stripe",
+      "description": "Label indicating the dialect of the incoming request (e.g. Stripe Elements)."
+    },
+    "outputAPI": {
+      "type": "string",
+      "enum": ["Chase", "Adyen", "Worldpay", "CyberSource"],
+      "default": "Chase",
+      "description": "Label indicating the target acquiring API dialect that the middleware will forward to."
+    },
+    "modoPOP": {
+      "type": "object",
+      "description": "Diagnostic steps shown in the ModoPOP terminal between input and output APIs.",
+      "properties": {
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "Receiving request",
+            "Transposing",
+            "Sending to Chase"
+          ]
+        }
+      },
+      "required": ["steps"]
+    },
+    "variables": {
+      "type": "object",
+      "description": "Abstract GUID placeholders available for substitution across all code editors and templates.",
+      "patternProperties": {
+        "^GUID[1-9]$": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Placeholder GUID variable (GUID1 through GUID9)."
+        }
+      },
+      "additionalProperties": false,
+      "maxProperties": 9,
+      "default": {}
+    },
+    "exampleTerminalOutput": {
+      "type": "object",
+      "description": "Terminal entries for both original and Modo-enabled flows, each keyed by scenario name.",
+      "properties": {
+        "original": {
+          "type": "array",
+          "description": "Terminal entries for the original flow.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "timestamp": {
+                "type": "string",
+                "pattern": "^\\d{2}:\\d{2}:\\d{2}$",
+                "examples": ["21:56:38"]
+              },
+              "channel": {
+                "type": "string",
+                "enum": ["Frontend Request", "ModoPOP", "Server", "Dashboard"]
+              },
+              "direction": {
+                "type": "string",
+                "enum": ["request", "response", "info"],
+                "default": "info"
+              },
+              "content": {
+                "type": "string",
+                "description": "Free-form text or payload that appears in the terminal line."
+              }
+            },
+            "required": ["channel", "content"]
+          }
+        },
+        "modoEnabled": {
+          "type": "array",
+          "description": "Terminal entries for the Modo-enabled flow.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "timestamp": {
+                "type": "string",
+                "pattern": "^\\d{2}:\\d{2}:\\d{2}$",
+                "examples": ["21:56:38"]
+              },
+              "channel": {
+                "type": "string",
+                "enum": ["Frontend Request", "ModoPOP", "Server", "Dashboard"]
+              },
+              "direction": {
+                "type": "string",
+                "enum": ["request", "response", "info"],
+                "default": "info"
+              },
+              "content": {
+                "type": "string",
+                "description": "Free-form text or payload that appears in the terminal line."
+              }
+            },
+            "required": ["channel", "content"]
+          }
+        }
+      },
+      "required": ["original", "modoEnabled"],
+      "examples": [
+        {
+          "original": [
+            {
+              "channel": "Frontend Request",
+              "direction": "request",
+              "content": "POST https://js.stripe.com/basil/stripe.js\n{\n  \"token\": \"tok_mock12345\",\n  \"amount\": 2274,\n  \"currency\": \"usd\"\n}"
+            },
+            {
+              "channel": "Server Request",
+              "direction": "request",
+              "content": "Received call from frontend:\nPOST /api/charge\n{\n  \"token\": \"tok_mock12345\",\n  \"amount\": 2274,\n  \"currency\": \"usd\"\n}\nCalling Stripe API:\nPOST https://api.stripe.com/v1/charges\n{\n  \"source\": \"tok_mock12345\",\n  \"amount\": 2274,\n  \"currency\": \"usd\"\n}"
+            },
+            {
+              "channel": "Server",
+              "direction": "info",
+              "content": "Processing complete"
+            }
+          ],
+          "modoEnabled": [
+            {
+              "channel": "Frontend Request",
+              "direction": "request",
+              "content": "POST https://js.modo.com/basil/stripe.js\n{\n  \"token\": \"tok_mock12345\",\n  \"amount\": 2274,\n  \"currency\": \"usd\"\n}"
+            },
+            {
+              "channel": "Server Request",
+              "direction": "request",
+              "content": "Received call from frontend:\nPOST /api/charge\n{\n  \"token\": \"tok_mock12345\",\n  \"amount\": 2274,\n  \"currency\": \"usd\"\n}\nCalling Modo API:\nPOST https://api.modo.com/v1/charges\n{\n  \"source\": \"tok_mock12345\",\n  \"amount\": 2274,\n  \"currency\": \"usd\"\n}"
+            },
+            {
+              "channel": "ModoPOP",
+              "direction": "info",
+              "content": "Receiving request in Stripe format\n{\n  \"token\": \"tok_mock12345\",\n  \"amount\": 2274,\n  \"currency\": \"usd\"\n}\nTransposing to Chase Format\n..."
+            },
+            {
+              "channel": "ModoPOP",
+              "direction": "request",
+              "content": "POST https://orbitalvar1.paymentech.net/authorize\n<RegisterTokenRequest>\n  <OrbitalConnectionUsername>${GUID1}</OrbitalConnectionUsername>\n  <OrbitalConnectionPassword>${GUID2}</OrbitalConnectionPassword>\n  <IndustryType>ECOM</IndustryType>\n  <MessageType>R</MessageType>\n  <Bin>4CN</Bin>\n  <MerchantID>1234567890</MerchantID>\n  <CardBrand>VI</CardBrand>\n  <CardNumber>4111111111111111</CardNumber>\n  <ExpiryDate>0825</ExpiryDate>\n  <CvData>123</CvData>\n</RegisterTokenRequest>"
+            },
+            {
+              "channel": "ModoPOP",
+              "direction": "info",
+              "content": "Processing complete"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "storeLogo",
+    "storeName",
+    "product",
+    "frontendCode",
+    "serverCode",
+    "inputAPI",
+    "outputAPI",
+    "modoPOP"
+  ]
+}
