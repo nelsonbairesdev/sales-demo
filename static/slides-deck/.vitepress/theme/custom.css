@@ -1,0 +1,422 @@
+/* Reset and Base Styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  color: #222;
+  font-family: 'Lora', serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  color: #14132A;
+  overflow-x: hidden;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Titillium Web', sans-serif;
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 700;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 600;
+}
+
+h3 {
+  font-size: clamp(1.25rem, 3vw, 2rem);
+  font-weight: 600;
+}
+
+h4 {
+  font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+  font-weight: 600;
+}
+
+p {
+  margin: 0 0 1rem 0;
+  font-size: clamp(1rem, 2.5vw, 1.125rem);
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+@media (min-width: 768px) {
+  .header {
+    padding: 1.5rem 2rem;
+  }
+}
+
+.logo {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .logo {
+    font-size: 1.5rem;
+  }
+}
+
+.logo img {
+  height: 32px;
+  width: auto;
+}
+
+@media (min-width: 768px) {
+  .logo img {
+    height: 40px;
+  }
+}
+
+/* Navigation - Removed in favor of sidebar */
+
+/* Sidebar Toggle */
+.sidebar-toggle {
+  display: block;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: #14132A;
+  transition: color 0.3s ease;
+}
+
+.sidebar-toggle:hover {
+  color: #007bff;
+}
+
+/* Main Menu - Removed in favor of sidebar */
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -300px;
+  width: 300px;
+  height: 100vh;
+  background: #ffffff;
+  z-index: 2000;
+  transition: left 0.3s ease;
+  overflow-y: auto;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+}
+
+.sidebar.active {
+  left: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #e5e5e5;
+  background: #f8f9fa;
+}
+
+.sidebar-header .logo img {
+  height: 32px;
+}
+
+.sidebar-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: #14132A;
+  transition: color 0.3s ease;
+}
+
+.sidebar-close:hover {
+  color: #007bff;
+}
+
+.sidebar-nav {
+  padding: 1rem 0;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-section {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.nav-section:last-child {
+  border-bottom: none;
+}
+
+.nav-section-title {
+  display: block;
+  padding: 1rem;
+  text-decoration: none;
+  color: #14132A;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease;
+}
+
+.nav-section-title:hover {
+  background: #f8f9fa;
+  color: #007bff;
+}
+
+.nav-submenu {
+  background: #f8f9fa;
+  border-top: 1px solid #e5e5e5;
+}
+
+.nav-submenu li {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.nav-submenu li:last-child {
+  border-bottom: none;
+}
+
+.nav-submenu a {
+  display: block;
+  padding: 0.75rem 1rem 0.75rem 2rem;
+  text-decoration: none;
+  color: #666;
+  font-weight: 400;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.nav-submenu a:hover {
+  background: #e9ecef;
+  color: #007bff;
+  padding-left: 2.5rem;
+}
+
+/* Sidebar Overlay */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+
+/* Links */
+a {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #0056b3;
+}
+
+/* Images */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Sidebar open state */
+body.sidebar-open {
+  overflow: hidden;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 280px;
+    left: -280px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 100%;
+    left: -100%;
+  }
+  
+  .sidebar-header {
+    padding: 0.75rem;
+  }
+  
+  .sidebar-nav {
+    padding: 0.5rem 0;
+  }
+  
+  .nav-section-title {
+    padding: 0.75rem;
+  }
+  
+  .nav-submenu a {
+    padding: 0.5rem 1rem 0.5rem 1.5rem;
+  }
+} 
+
+/* Bubble chart container */
+.bubble-chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  min-height: 80vh;
+}
+
+.bubble-chart-svg {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background: #fafafa;
+}
+
+/* Quadrant backgrounds */
+.quadrant-bg {
+  opacity: 0.1;
+}
+
+.quadrant-bg.efficiency-quantitative {
+  fill: #16a34a;
+}
+
+.quadrant-bg.growth-quantitative {
+  fill: #059669;
+}
+
+.quadrant-bg.efficiency-qualitative {
+  fill: #84cc16;
+}
+
+.quadrant-bg.growth-qualitative {
+  fill: #22c55e;
+}
+
+/* Bubble styles */
+.bubble {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.bubble:hover {
+  stroke: #374151;
+  stroke-width: 2px;
+}
+
+.bubble.selected {
+  stroke: #1f2937;
+  stroke-width: 3px;
+}
+
+/* Bubble controls */
+.bubble-controls {
+  position: absolute;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  display: flex;
+  gap: 0.25rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.bubble-control-btn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.bubble-control-btn.increase {
+  background: #10b981;
+  color: white;
+}
+
+.bubble-control-btn.decrease {
+  background: #ef4444;
+  color: white;
+}
+
+/* Tooltip styles */
+.bubble-tooltip {
+  position: absolute;
+  background: #1f2937;
+  color: white;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  max-width: 250px;
+  pointer-events: none;
+  z-index: 1000;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Axis labels */
+.axis-label {
+  font-size: 14px;
+  font-weight: 600;
+  fill: #374151;
+}
+
+.quadrant-label {
+  font-size: 12px;
+  font-weight: 500;
+  fill: #6b7280;
+  text-anchor: middle;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .bubble-chart-container svg {
+    width: 100%;
+    height: auto;
+  }
+}
