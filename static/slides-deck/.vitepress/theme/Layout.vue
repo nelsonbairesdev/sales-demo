@@ -30,7 +30,7 @@
             <ul class="nav-submenu">
               <li v-for="(slide, index) in slideSequence" :key="index">
                 <a 
-                  :href="`/slides-deck/problems/problem-${slide.id}`" 
+                  :href="`/sales-demo/slides-deck/problems/problem-${slide.id}`" 
                   @click.prevent="loadSlideContent(slide)"
                 >
                   {{ slide.title }}
@@ -143,7 +143,7 @@ const loadSlideContent = async (slide: any) => {
   // Load problem slides
   if (slide.type === 'problem') {
     try {
-      const response = await fetch(`/slides-deck/problems/problem-${slide.id}.md`)
+      const response = await fetch(`/sales-demo/slides-deck/problems/problem-${slide.id}.md`)
       if (response.ok) {
         const content = await response.text()
         // Convert markdown to HTML (basic conversion)
@@ -159,7 +159,7 @@ const loadSlideContent = async (slide: any) => {
   // Load intro slide
   if (slide.type === 'intro') {
     try {
-      const response = await fetch(`/slides-deck/index.md`)
+      const response = await fetch(`/sales-demo/slides-deck/index.md`)
       if (response.ok) {
         const content = await response.text()
         // Convert markdown to HTML (basic conversion)
@@ -174,7 +174,7 @@ const loadSlideContent = async (slide: any) => {
   if (slide.type === 'bubble-chart') {
     try {
       showBubbleChart.value = true
-      const response = await fetch(`/slides-deck/bubble-chart.md`)
+      const response = await fetch(`/sales-demo/slides-deck/bubble-chart.md`)
       if (response.ok) {
         const content = await response.text()
         // Convert markdown to HTML (basic conversion)
