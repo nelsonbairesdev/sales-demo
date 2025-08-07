@@ -4,7 +4,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: 'Modo Slides',
   description: 'Modo presentation slides',
-  base: '/slides-deck/',
+  base: '/sales-demo/slides-deck/',
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
